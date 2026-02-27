@@ -2,6 +2,7 @@ package account
 
 import (
 	"encoding/json"
+	"okak/encrypter"
 	"okak/okak"
 	"strings"
 	"time"
@@ -26,10 +27,11 @@ type Vault struct {
 
 type VaultWithDb struct {
 	Vault
-	db Db
+	db  Db
+	enc encrypter.Encrypter
 }
 
-func NewVault(db Db) *VaultWithDb {
+func NewVault(db Db, enc encrypter.Encrypter) *VaultWithDb {
 	file, err := db.Read()
 	if err != nil {
 		return &VaultWithDb{
@@ -37,7 +39,8 @@ func NewVault(db Db) *VaultWithDb {
 				Accounts: []Account{},
 				UpdateAt: time.Now(),
 			},
-			db: db,
+			db:  db,
+			enc: enc,
 		}
 	}
 	var vault Vault
@@ -49,12 +52,14 @@ func NewVault(db Db) *VaultWithDb {
 				Accounts: []Account{},
 				UpdateAt: time.Now(),
 			},
-			db: db,
+			db:  db,
+			enc: enc,
 		}
 	}
 	return &VaultWithDb{
 		Vault: vault,
 		db:    db,
+		enc:   enc,
 	}
 }
 

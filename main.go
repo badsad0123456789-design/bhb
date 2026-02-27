@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"okak/account"
+	"okak/encrypter"
 	"okak/files"
 	"okak/okak"
-	"os"
 	"strings"
 
 	"github.com/fatih/color"
@@ -43,17 +43,8 @@ func main() {
 	if err != nil {
 		okak.PrintError("Не удалось найти .env файла")
 	}
-	res := os.Getenv("VAR")
-	fmt.Println(res)
-
-	for _, a := range os.Environ() {
-		pair := strings.SplitN(a, "=", 2)
-		fmt.Println(pair[0])
-	}
-	fmt.Println(os.Getenv("KEY"))
-	fmt.Println(os.Getenv("URL"))
 	counter := menuCounter()
-	vault := account.NewVault(files.NewJsonDb("data.json"))
+	vault := account.NewVault(files.NewJsonDb("data.json"), *encrypter.NewEncrypter())
 	//vault := account.NewVault(cloud.NewCloudDb("https://a.ru")) // как это связано с cloud
 
 Menu:

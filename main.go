@@ -44,7 +44,7 @@ func main() {
 		okak.PrintError("Не удалось найти .env файла")
 	}
 	counter := menuCounter()
-	vault := account.NewVault(files.NewJsonDb("data.json"), *encrypter.NewEncrypter())
+	vault := account.NewVault(files.NewJsonDb("data.vault"), *encrypter.NewEncrypter())
 	//vault := account.NewVault(cloud.NewCloudDb("https://a.ru")) // как это связано с cloud
 
 Menu:

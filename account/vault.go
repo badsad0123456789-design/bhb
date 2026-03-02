@@ -43,10 +43,11 @@ func NewVault(db Db, enc encrypter.Encrypter) *VaultWithDb {
 			enc: enc,
 		}
 	}
+	data := enc.Decrypt(file)
 	var vault Vault
-	err = json.Unmarshal(file, &vault)
+	err = json.Unmarshal(data, &vault)
 	if err != nil {
-		okak.PrintError("Не удалось разобрать файл data.json")
+		okak.PrintError("Не удалось разобрать файл data.vault")
 		return &VaultWithDb{
 			Vault: Vault{
 				Accounts: []Account{},
@@ -106,8 +107,9 @@ func (vault *Vault) ToBytes() ([]byte, error) {
 func (vault *VaultWithDb) save() {
 	vault.UpdateAt = time.Now()
 	data, err := vault.Vault.ToBytes()
+	encData := vault.enc.Encrypt(data)
 	if err != nil {
 		okak.PrintError(err)
 	}
-	vault.db.Write(data)
+	vault.db.Write(encData)
 }

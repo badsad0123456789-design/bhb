@@ -6,6 +6,8 @@ import (
 	"okak/okak"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 type ByteReader interface {
@@ -46,6 +48,7 @@ func NewVault(db Db, enc encrypter.Encrypter) *VaultWithDb {
 	data := enc.Decrypt(file)
 	var vault Vault
 	err = json.Unmarshal(data, &vault)
+	color.Cyan("Найдено %d аккаунтов", len(vault.Accounts))
 	if err != nil {
 		okak.PrintError("Не удалось разобрать файл data.vault")
 		return &VaultWithDb{
